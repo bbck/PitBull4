@@ -24,6 +24,7 @@ PitBull4_HideBlizzard:SetDefaults({}, {
 	aura = false,
 	runebar = true,
 	altpower = true,
+	boss = false,
 })
 
 function PitBull4_HideBlizzard:OnEnable()
@@ -258,6 +259,23 @@ function showers:altpower()
 	UnitPowerBarAlt_UpdateAll(PlayerPowerBarAlt)
 end
 
+function hiders:boss()
+	for i = 1, 4 do
+		local frame = _G["Boss"..i.."TargetFrame"]
+		frame:UnregisterAllEvents()
+		frame:Hide()
+		frame.Show = function () end
+	end
+end
+
+function showers:boss()
+	for i = 1, 4 do
+		local frame = _G["Boss"..i.."TargetFrame"]
+		frame.Show = nil
+		frame:GetScript("OnLoad")(frame)
+	end
+end
+
 for k, v in pairs(hiders) do
 	hiders[k] = PitBull4:OutOfCombatWrapper(v)
 end
@@ -346,5 +364,12 @@ PitBull4_HideBlizzard:SetGlobalOptionsFunction(function(self)
 		hidden = function (info)
 			return hidden(info) or not cata_400
 		end,
+	}, 'boss', {
+		type = 'toggle',
+		name = L["Boss Frames"],
+		desc = L["Hide the standard boss frames."],
+		get = get,
+		set = set,
+		hidden = hidden,			
 	}
 end)
