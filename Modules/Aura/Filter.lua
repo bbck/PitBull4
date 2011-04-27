@@ -523,7 +523,7 @@ self_buffs.PRIEST = {
 	[15258] = not cata_400 or nil, -- Shadow Weaving
 	[15473] = true, -- Shadowform
 	[27827] = true, -- Spirit of Redemption
-	[33151]	= true, -- Surge of Light
+	[88690]	= true, -- Surge of Light
 }
 self_debuffs.PRIEST = {}
 pet_buffs.PRIEST = {}
@@ -683,7 +683,7 @@ self_buffs.WARLOCK = {
 	[47245] = true, -- Molten Core
 	[30299] = true, -- Nether Protection
 	[1050]  = true, -- Sacrifice
-	[5500]  = true, -- Sense Demons
+	[5500]  = not cata_400 or nil, -- Sense Demons
 	[17941] = true, -- Shadow Trance
 	[6229]  = true, -- Shadow Ward
 	[19028] = true, -- Soul Link

@@ -8,6 +8,7 @@ end
 local L = PitBull4.L
 
 local cata_400 = select(4,GetBuildInfo()) >= 40000
+local cata_410 = select(4,GetBuildInfo()) >= 40100
 
 local PitBull4_HideBlizzard = PitBull4:NewModule("HideBlizzard")
 
@@ -109,7 +110,7 @@ function hiders:party()
 	
 	UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
 
-	if not cata_400 then return end
+	if not cata_400 or cata_410 then return end
 	CompactPartyFrame:UnregisterEvent("PARTY_MEMBERS_CHANGED")
 	CompactPartyFrame:UnregisterEvent("RAID_ROSTER_UPDATE")
 	CompactPartyFrame:Hide()
@@ -130,7 +131,7 @@ function showers:party()
 
 	UIParent:RegisterEvent("RAID_ROSTER_UPDATE")
 
-	if not cata_400 then return end
+	if not cata_400 or cata_410 then return end
 	CompactPartyFrame:RegisterEvent("PARTY_MEMBERS_CHANGED")
 	CompactPartyFrame:RegisterEvent("RAID_ROSTER_UPDATE")
 	if GetDisplayedAllyFrames then
@@ -308,13 +309,20 @@ PitBull4_HideBlizzard:SetGlobalOptionsFunction(function(self)
 		type = 'toggle',
 		name = L["Party"],
 		desc = L["Hide the standard party frames."],
-		get = get,
+		get = function (info)
+			if cata_410 and GetDisplayedAllyFrames() == "raid" then
+				return false
+			else
+				return get(info)
+			end
+		end,
 		set = set,
 		hidden = hidden,	
+		disabled = function() return cata_410 and GetDisplayedAllyFrames() == "raid" end,
 	}, 'raid', {
 		type = 'toggle',
 		name = L["Raid"],
-		desc = L["Hide the standard raid manager and raid frames."],
+		desc = L["Hide the standard raid manager and raid frames and party frames (when set to use raid style in blizzard interface options)."],
 		get = get,
 		set = set,
 		hidden = function (info)
